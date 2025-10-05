@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/keys.dart';
-import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/services/a_menager.dart';
 
 class PHome extends StatefulWidget {
@@ -18,6 +16,8 @@ class _PHomeState extends State<PHome> {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> itemList = [
+      {Keys.label: "Alarm", Keys.imagePath: AMenager.alarm},
+      {Keys.label: "Stop Watch", Keys.imagePath: AMenager.stopWatch},
       {Keys.label: "Alarm", Keys.imagePath: AMenager.alarm},
       {Keys.label: "Stop Watch", Keys.imagePath: AMenager.stopWatch},
       {Keys.label: "Calender", Keys.imagePath: AMenager.calender},
@@ -53,7 +53,7 @@ class _PHomeState extends State<PHome> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
-                  radius: 28,
+                  radius: 28.r,
                   backgroundColor: Colors.black,
                   child: Icon(Icons.add, color: Colors.white),
                 ),
@@ -63,7 +63,7 @@ class _PHomeState extends State<PHome> {
         ],
       ),
       appBar: AppBar(
-        leading: Image.asset(AMenager.defaultProfile),
+        leading: Image.asset(AMenager.defaultProfile, height:20,width: 20, fit: BoxFit.fitHeight,).padAll(padAll: 2),
         title: Text("Daily Task"),
       ),
       body: Column(
@@ -74,14 +74,16 @@ class _PHomeState extends State<PHome> {
           ),
           GridView.builder(
             shrinkWrap: true,
-            itemCount: 4,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+            itemCount: itemList.length,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 0.5.sw,
+              mainAxisExtent: 214.h,
             ),
             itemBuilder: (_, index) {
               return _gridItem(
                 label: itemList[index][Keys.label],
                 imagePath: itemList[index][Keys.imagePath],
+                backgroundColor: Colors.red[index*100],
               );
             },
           ),
@@ -90,10 +92,8 @@ class _PHomeState extends State<PHome> {
     );
   }
 
-  Widget _gridItem({required String label, required String imagePath}) {
-    return SizedBox(
-      width: 190,
-      height: 214,
+  Widget _gridItem({required String label,required Color? backgroundColor, required String imagePath}) {
+    return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -105,7 +105,7 @@ class _PHomeState extends State<PHome> {
             ).textTheme.titleLarge!.copyWith(fontSize: 20.sp),
           ),
         ],
-      ).paddingAll(),
+      ).padAll(),
     );
   }
 }

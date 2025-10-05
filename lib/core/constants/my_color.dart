@@ -6,5 +6,4 @@ class MyColor {
   static Color get buttnColor =>Color(0xFFFFFFFF);
   static Color get cardColor =>Color(0x1A0088FF);
   static Color get tailLeadingColor =>Color(0x990088FF);
-
 }
