@@ -101,14 +101,14 @@ class CTheme extends GetxController {
         color: Colors.black,
       ),
       titleMedium: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 18.sp,
         fontWeight: FontWeight.w500,
         color: Colors.black87,
       ),
       titleSmall: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 16.sp,
         fontWeight: FontWeight.w500,
-        color: Colors.black54,
+        color: Colors.black,
       ),
 
       // 🔹 Body

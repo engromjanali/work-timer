@@ -4,29 +4,29 @@ import 'package:work_timer/core/constants/my_dimention.dart';
 
 // padding extension
 extension PaddingExtension on Widget {
-  Widget padAll({double? padAll}) {
+  Widget padAll({double? val}) {
     return Padding(
-      padding: EdgeInsets.all(padAll ?? MyDimension.padAll),
+      padding: EdgeInsets.all(val ?? MyDimension.padAll),
       child: this,
     );
   }
 
-  Widget padX({double? padX}) {
+  Widget padX({double? val}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padX ?? MyDimension.padX),
+      padding: EdgeInsets.symmetric(horizontal: val ?? MyDimension.padX),
       child: this,
     );
   }
 
-  Widget padY({double? padY}) {
+  Widget padY({double? val}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padY ?? MyDimension.padY),
+      padding: EdgeInsets.symmetric(vertical: val ?? MyDimension.padY),
       child: this,
     );
   }
 
-  Widget padO({EdgeInsets padOnly = const EdgeInsets.only()}) {
-    return Padding(padding: padOnly, child: this);
+  Widget padO({EdgeInsets val = const EdgeInsets.only()}) {
+    return Padding(padding: val, child: this);
   }
 
   Widget padOT({double? padT}) {
@@ -43,17 +43,29 @@ extension PaddingExtension on Widget {
     );
   }
 
-  Widget padOR({double? padR}) {
+  Widget padOR({double? val}) {
     return Padding(
-      padding: EdgeInsets.only(right: padR ?? MyDimension.padR),
+      padding: EdgeInsets.only(right: val ?? MyDimension.padR),
       child: this,
     );
   }
 
-  Widget padOB({double? padB}) {
+  Widget padOB({double? val}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: padB ?? MyDimension.padB),
+      padding: EdgeInsets.only(bottom: val ?? MyDimension.padB),
       child: this,
     );
   }
+}
+
+
+Widget spaceX({double? val}){
+  return SizedBox(
+    width: val??10,
+  );
+}
+Widget spaceY(double? val){
+  return SizedBox(
+    height: val??10,
+  );
 }

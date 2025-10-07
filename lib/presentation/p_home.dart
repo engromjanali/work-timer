@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/keys.dart';
+import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/services/a_menager.dart';
+import 'package:work_timer/presentation/p_add_task.dart';
 
 class PHome extends StatefulWidget {
   const PHome({super.key});
@@ -36,7 +39,6 @@ class _PHomeState extends State<PHome> {
 
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-              // BottomNavigationBarItem(icon: Icon(Icons.add, size: 30,), label: ""),
               BottomNavigationBarItem(
                 icon: Icon(Icons.access_time),
                 label: "History",
@@ -49,6 +51,7 @@ class _PHomeState extends State<PHome> {
             child: GestureDetector(
               onTap: () {
                 // do something here
+                Get.to(() => PAddTask());
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -63,8 +66,25 @@ class _PHomeState extends State<PHome> {
         ],
       ),
       appBar: AppBar(
-        leading: Image.asset(AMenager.defaultProfile, height:20,width: 20, fit: BoxFit.fitHeight,).padAll(padAll: 2),
+        leading: Image.asset(
+          AMenager.defaultProfile,
+          height: 20,
+          width: 20,
+          fit: BoxFit.fitHeight,
+        ).padAll(val: 2),
         title: Text("Daily Task"),
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+              color: MyColor.white,
+              border: Border.all(color: MyColor.backgroundColor),
+
+              shape: BoxShape.circle,
+            ),
+
+            child: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -83,7 +103,7 @@ class _PHomeState extends State<PHome> {
               return _gridItem(
                 label: itemList[index][Keys.label],
                 imagePath: itemList[index][Keys.imagePath],
-                backgroundColor: Colors.red[index*100],
+                backgroundColor: Colors.red[index * 100],
               );
             },
           ),
@@ -92,12 +112,16 @@ class _PHomeState extends State<PHome> {
     );
   }
 
-  Widget _gridItem({required String label,required Color? backgroundColor, required String imagePath}) {
+  Widget _gridItem({
+    required String label,
+    required Color? backgroundColor,
+    required String imagePath,
+  }) {
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: Image.asset(imagePath, fit: BoxFit.fill,)),
+          Expanded(child: Image.asset(imagePath, fit: BoxFit.fill)),
           Text(
             label,
             style: Theme.of(
