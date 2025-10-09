@@ -6,6 +6,9 @@ import 'package:work_timer/core/constants/keys.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/services/a_menager.dart';
 import 'package:work_timer/presentation/p_add_task.dart';
+import 'package:work_timer/presentation/p_settings.dart';
+import 'package:work_timer/presentation/p_stopwatch.dart';
+import 'package:work_timer/presentation/p_task.dart';
 
 class PHome extends StatefulWidget {
   const PHome({super.key});
@@ -19,8 +22,6 @@ class _PHomeState extends State<PHome> {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> itemList = [
-      {Keys.label: "Alarm", Keys.imagePath: AMenager.alarm},
-      {Keys.label: "Stop Watch", Keys.imagePath: AMenager.stopWatch},
       {Keys.label: "Alarm", Keys.imagePath: AMenager.alarm},
       {Keys.label: "Stop Watch", Keys.imagePath: AMenager.stopWatch},
       {Keys.label: "Calender", Keys.imagePath: AMenager.calender},
@@ -51,7 +52,7 @@ class _PHomeState extends State<PHome> {
             child: GestureDetector(
               onTap: () {
                 // do something here
-                Get.to(() => PAddTask());
+                Get.to(() => PTask());
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -66,23 +67,33 @@ class _PHomeState extends State<PHome> {
         ],
       ),
       appBar: AppBar(
-        leading: Image.asset(
-          AMenager.defaultProfile,
-          height: 20,
-          width: 20,
-          fit: BoxFit.fitHeight,
-        ).padAll(val: 2),
+        leading: GestureDetector(
+          onTap: () {
+            Get.to(()=>PSettings());
+          },
+          child: Image.asset(
+            AMenager.defaultProfile,
+            height: 20,
+            width: 20,
+            fit: BoxFit.fitHeight,
+          ).padAll(val: 2),
+        ),
         title: Text("Daily Task"),
         actions: [
-          Container(
-            decoration: BoxDecoration(
-              color: MyColor.white,
-              border: Border.all(color: MyColor.backgroundColor),
-
-              shape: BoxShape.circle,
+          GestureDetector(
+            onTap: () {
+              Get.to(()=>PSettings());
+            },
+            child: Container(
+              height: 40.r,
+              width: 40.r,
+              decoration: BoxDecoration(
+                color: MyColor.white,
+                border: Border.all(color: MyColor.backgroundColor),
+                shape: BoxShape.circle,
+              ),
+              child: Center(child: Icon(Icons.settings, size: 25.r,)),
             ),
-
-            child: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
           ),
         ],
       ),
@@ -102,8 +113,19 @@ class _PHomeState extends State<PHome> {
             itemBuilder: (_, index) {
               return _gridItem(
                 label: itemList[index][Keys.label],
+                onTap:(){
+                  switch(index){
+                    case 0:
+                      Get.to(()=>PStopwatch());
+                    case 1:
+                      Get.to(()=>PStopwatch());
+                    case 2:
+                      Get.to(()=>PStopwatch());
+                    default:
+                      Get.to(()=>PStopwatch());
+                  }
+                },
                 imagePath: itemList[index][Keys.imagePath],
-                backgroundColor: Colors.red[index * 100],
               );
             },
           ),
@@ -114,22 +136,25 @@ class _PHomeState extends State<PHome> {
 
   Widget _gridItem({
     required String label,
-    required Color? backgroundColor,
     required String imagePath,
+    required Function() onTap,
   }) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(child: Image.asset(imagePath, fit: BoxFit.fill)),
-          Text(
-            label,
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge!.copyWith(fontSize: 20.sp),
-          ),
-        ],
-      ).padAll(),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: Image.asset(imagePath, fit: BoxFit.fill)),
+            Text(
+              label,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge!.copyWith(fontSize: 20.sp),
+            ),
+          ],
+        ).padAll(),
+      ),
     );
   }
 }

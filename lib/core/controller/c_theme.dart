@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:work_timer/core/constants/my_color.dart';
+import 'package:work_timer/core/constants/my_dimention.dart';
 
 class CTheme extends GetxController {
   int currentIndex = 0;
@@ -51,7 +52,7 @@ class CTheme extends GetxController {
         color: Colors.black,
         fontWeight: FontWeight.w700,
         fontSize: 24.sp,
-        backgroundColor: MyColor.white,
+        
       ),
     ),
 
@@ -131,59 +132,64 @@ class CTheme extends GetxController {
       // 🔹 Label
       labelLarge: TextStyle(
         fontSize: 14.sp,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
       ),
       labelMedium: TextStyle(
         fontSize: 12.sp,
         fontWeight: FontWeight.w500,
-        color: Colors.white70,
+        color: Colors.black,
       ),
       labelSmall: TextStyle(
         fontSize: 11.sp,
-        fontWeight: FontWeight.w400,
-        color: Colors.grey,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
       ),
     ),
 
     // ▶️ Input Field Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.white,
-      // hintStyle: TextStyle(
-      //   color: const Color(0xFFA0A0A0),
-      //   fontSize: 15.sp,
-      //   fontWeight: FontWeight.w400,
-      // ),
-      // errorStyle: TextStyle(
-      //   color: Colors.red,
-      //   fontSize: 12.sp,
-      //   fontWeight: FontWeight.w400,
-      // ),
-      // border: OutlineInputBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(PDimension.boarderRadius)),
-      //   borderSide: const BorderSide(color: Color(0xFF8391A1), width: 0.5),
-      // ),
-      // focusedBorder: OutlineInputBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(PDimension.boarderRadius)),
-      //   borderSide: const BorderSide(color: Color(0xFF8391A1), width: 0.5),
-      // ),
-      // enabledBorder: OutlineInputBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(PDimension.boarderRadius)),
-      //   borderSide: const BorderSide(color: Color(0xFF8391A1), width: 0.5),
-      // ),
-      // errorBorder: OutlineInputBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(PDimension.boarderRadius)),
-      //   borderSide: const BorderSide(color: Color(0xFF8391A1), width: 0.5),
-      // ),
-      // disabledBorder: OutlineInputBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(PDimension.boarderRadius)),
-      //   borderSide: const BorderSide(color: Color(0xFF8391A1), width: 0.5),
-      // ),
-      // focusedErrorBorder: OutlineInputBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(PDimension.boarderRadius)),
-      //   borderSide: const BorderSide(color: Color(0xFF8391A1), width: 0.5),
-      // ),
+      alignLabelWithHint: true,// lable will be show initially like hit text.
+      fillColor: MyColor.textFieldFillColor,
+      labelStyle: TextStyle(
+        color: Colors.black,
+      ),
+      hintStyle: TextStyle(
+        color: const Color(0xFFA0A0A0),
+        fontSize: 15.sp,
+        fontWeight: FontWeight.w400,
+      ),
+      errorStyle: TextStyle(
+        color: Colors.red,
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(MyDimension.boarderRadius)),
+        borderSide: const BorderSide(color: MyColor.textFieldEnabledBorder, width: 1),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(MyDimension.boarderRadius)),
+        borderSide: const BorderSide(color: MyColor.textFieldEnabledBorder, width: 1),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(MyDimension.boarderRadius)),
+        borderSide: const BorderSide(color: MyColor.textFieldEnabledBorder, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(MyDimension.boarderRadius)),
+        borderSide: const BorderSide(color: MyColor.textFieldEnabledBorder, width: 1),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(MyDimension.boarderRadius)),
+        borderSide: const BorderSide(color: MyColor.textFieldEnabledBorder, width: 1),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(MyDimension.boarderRadius)),
+        borderSide: const BorderSide(color: MyColor.textFieldEnabledBorder, width: 1),
+      ),
+      
     ),
 
     // ▶️ Button Theme

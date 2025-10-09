@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
 
 
@@ -6,53 +7,49 @@ import 'package:work_timer/core/constants/my_dimention.dart';
 extension PaddingExtension on Widget {
   Widget padAll({double? val}) {
     return Padding(
-      padding: EdgeInsets.all(val ?? MyDimension.padAll),
+      padding: EdgeInsets.symmetric(vertical:  val?.h ?? MyDimension.padAll, horizontal: val?.w ?? MyDimension.padAll),
       child: this,
     );
   }
 
   Widget padX({double? val}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: val ?? MyDimension.padX),
+      padding: EdgeInsets.symmetric(horizontal: val?.w ?? MyDimension.padX),
       child: this,
     );
   }
 
   Widget padY({double? val}) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: val ?? MyDimension.padY),
+      padding: EdgeInsets.symmetric(vertical: val?.h ?? MyDimension.padY),
       child: this,
     );
   }
 
-  Widget padO({EdgeInsets val = const EdgeInsets.only()}) {
-    return Padding(padding: val, child: this);
-  }
-
-  Widget padOT({double? padT}) {
+  Widget padOT({double? val}) {
     return Padding(
-      padding: EdgeInsets.only(top: padT ?? MyDimension.padT),
+      padding: EdgeInsets.only(top: val?.h ?? MyDimension.padT),
       child: this,
     );
   }
 
-  Widget padOL({double? padL}) {
+  Widget padOL({double? val}) {
     return Padding(
-      padding: EdgeInsets.only(left: padL ?? MyDimension.padL),
+      padding: EdgeInsets.only(left: val?.w ?? MyDimension.padL),
       child: this,
     );
   }
 
   Widget padOR({double? val}) {
     return Padding(
-      padding: EdgeInsets.only(right: val ?? MyDimension.padR),
+      padding: EdgeInsets.only(right: val?.w ?? MyDimension.padR),
       child: this,
     );
   }
 
   Widget padOB({double? val}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: val ?? MyDimension.padB),
+      padding: EdgeInsets.only(bottom: val?.h ?? MyDimension.padB),
       child: this,
     );
   }
@@ -61,11 +58,11 @@ extension PaddingExtension on Widget {
 
 Widget spaceX({double? val}){
   return SizedBox(
-    width: val??10,
+    width: val?.w??10.h,
   );
 }
-Widget spaceY(double? val){
+Widget spaceY({double? val}){
   return SizedBox(
-    height: val??10,
+    height: val?.h ?? 10.h,
   );
 }
