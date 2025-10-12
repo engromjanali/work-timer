@@ -5,10 +5,14 @@ import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/keys.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/services/a_menager.dart';
+import 'package:work_timer/presentation/p_add_alarm.dart';
 import 'package:work_timer/presentation/p_add_task.dart';
+import 'package:work_timer/presentation/p_history_screen.dart';
 import 'package:work_timer/presentation/p_settings.dart';
 import 'package:work_timer/presentation/p_stopwatch.dart';
 import 'package:work_timer/presentation/p_task.dart';
+import 'package:work_timer/presentation/test.dart';
+
 
 class PHome extends StatefulWidget {
   const PHome({super.key});
@@ -34,6 +38,10 @@ class _PHomeState extends State<PHome> {
           BottomNavigationBar(
             currentIndex: selectitem,
             onTap: (value) {
+              if(value==1){
+                Get.to(()=>PHistory());
+                return;
+              }
               selectitem = value;
               setState(() {});
             },
@@ -69,7 +77,7 @@ class _PHomeState extends State<PHome> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Get.to(()=>PSettings());
+            Get.to(()=>PHistory());
           },
           child: Image.asset(
             AMenager.defaultProfile,
@@ -116,7 +124,7 @@ class _PHomeState extends State<PHome> {
                 onTap:(){
                   switch(index){
                     case 0:
-                      Get.to(()=>PStopwatch());
+                      Get.to(()=>PAddAlarm());
                     case 1:
                       Get.to(()=>PStopwatch());
                     case 2:

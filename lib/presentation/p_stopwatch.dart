@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
@@ -27,20 +28,50 @@ class _PStopwatchState extends State<PStopwatch> {
       appBar: AppBar(title: Text("Stopwatch")),
       body: Column(
         children: [
+          SizedBox.square(
+            dimension: 190.w,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: MyColor.cardColor,
+                border: Border.all(color: MyColor.buttonColor, width: 10.w),
+              ),
+              child: Center(
+                child: Text(
+                  "00 : 00",
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+            ),
+          ).padY(val: 50),
+
+          // list while 
           SizedBox(
-            height: 200,
-            child: ListWheelScrollView(
-              itemExtent: 20,
-              children: List.generate(list.length, (index){
-                return Container(
-                  color: Colors.red[index*100],
-                  height: 20,
-                  child: Center(child: list[index]),
-                );
-              }),
+            child: ClipRRect(
+              child: Align(
+                alignment: Alignment.topCenter,
+              heightFactor: 0.6, // show only top half
+                child: SizedBox(
+                  height: 400,
+                  child: ListWheelScrollView.useDelegate(
+                    physics: FixedExtentScrollPhysics(),
+                    itemExtent: 30,
+                    onSelectedItemChanged: (value) {
+                      print(value);
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      childCount: list.length,
+                      builder: (BuildContext context, int index) {
+                        return Center(child: list[index]);
+                      },
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
 
+          // buttons tile 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -85,7 +116,7 @@ class _PStopwatchState extends State<PStopwatch> {
                 ).padX().padY(val: 5),
               ),
             ],
-          ),
+          ).padY(),
         ],
       ),
     );

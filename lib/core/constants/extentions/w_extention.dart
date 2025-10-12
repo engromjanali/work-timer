@@ -66,3 +66,7 @@ Widget spaceY({double? val}){
     height: val?.h ?? 10.h,
   );
 }
+
+extension WidgetSliverBox on Widget{
+  Widget get asSliverBox => SliverToBoxAdapter(child: this);
+}
