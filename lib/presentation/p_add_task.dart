@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
+import 'package:work_timer/core/widgets/w_button.dart';
 
 class PAddTask extends StatefulWidget {
   const PAddTask({super.key});
@@ -117,20 +118,7 @@ class _PAddTaskState extends State<PAddTask> {
           Spacer(),
 
           // create Task
-          SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                color: MyColor.buttonColor,
-                borderRadius: BorderRadius.circular(MyDimension.borderRadius)
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Create Task", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: MyColor.white, fontWeight: FontWeight.w600),),
-                ],
-              ).padY(),
-            ),
-          )
+          WButton(),
         ],
       ).padAll(),
     );

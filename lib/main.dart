@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/state_manager.dart';
+import 'package:work_timer/core/blocs/counter_bloc.dart';
 import 'package:work_timer/core/controller/c_theme.dart';
 import 'package:work_timer/presentation/p_home.dart';
 // import 'dart:async';
@@ -410,7 +412,8 @@ import 'package:work_timer/presentation/p_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
+void main() async{
+  await ScreenUtil.ensureScreenSize();
   runApp(const MyApp());
 }
 
@@ -432,11 +435,14 @@ class MyApp extends StatelessWidget {
               duration: Duration(microseconds: 500),
               curve: Curves.bounceIn,
               data: cTheme.currentTheme,
-              child: GetMaterialApp(
-                theme: cTheme.lightTheme,
-                darkTheme: cTheme.darkTheme,
-                themeMode: ThemeMode.light,
-                home: const PHome()),
+              child: BlocProvider(
+                create: (context) => CounterBloc(),
+                child: GetMaterialApp(
+                  theme: cTheme.lightTheme,
+                  darkTheme: cTheme.darkTheme,
+                  themeMode: ThemeMode.light,
+                  home: const PHome()),
+              ),
             );
           },
         );

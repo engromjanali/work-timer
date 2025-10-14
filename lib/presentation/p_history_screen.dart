@@ -1,10 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
 
-class PHistory extends StatelessWidget {
+class PHistory extends StatefulWidget {
   const PHistory({super.key});
+
+  @override
+  State<PHistory> createState() => _PHistoryState();
+}
+
+class _PHistoryState extends State<PHistory> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +164,7 @@ class WListTile extends StatelessWidget {
 
       color: Colors.transparent,
       elevation: 0,
-      
+
       items: [
         PopupMenuItem(
           value: 'edit',
@@ -179,7 +188,7 @@ class WListTile extends StatelessWidget {
         ),
         PopupMenuItem(
           value: 'Duplicate',
-          padding:  EdgeInsets.symmetric(vertical: 2),
+          padding: EdgeInsets.symmetric(vertical: 2),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,

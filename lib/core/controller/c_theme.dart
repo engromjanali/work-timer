@@ -7,11 +7,9 @@ import 'package:work_timer/core/constants/my_dimention.dart';
 class CTheme extends GetxController {
   int currentIndex = 0;
 
-  late List<ThemeData> themeList = [_lightTheme, _darkTheme];
-
-  ThemeData get currentTheme => themeList[currentIndex];
-  ThemeData get lightTheme => themeList[0];
-  ThemeData get darkTheme => themeList[1];
+  ThemeData get currentTheme => currentIndex==0? lightTheme : darkTheme;
+  ThemeData get lightTheme => _lightTheme;
+  ThemeData get darkTheme => _darkTheme;
   Color backgroundColor = MyColor.backgroundColor;
   Color backGroundColorDark = Colors.black;
 
@@ -22,7 +20,7 @@ class CTheme extends GetxController {
     // SharedPrefService.instance.setInt(PKeys.themeIndex, index);
   }
 
-  late final ThemeData _lightTheme = ThemeData(
+  ThemeData get _lightTheme => ThemeData(
     // ▶️ bottom navigation ber Theme
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: MyColor.white,
@@ -217,7 +215,7 @@ class CTheme extends GetxController {
     ),
   );
 
-  late final ThemeData _darkTheme = ThemeData(
+  ThemeData get _darkTheme => ThemeData(
     // ▶️ Core Configuration
     brightness: Brightness.dark,
     scaffoldBackgroundColor: backGroundColorDark,

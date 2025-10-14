@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:work_timer/core/blocs/counter_bloc.dart';
 import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
@@ -12,6 +16,8 @@ class PStopwatch extends StatefulWidget {
 }
 
 class _PStopwatchState extends State<PStopwatch> {
+  Timer? timer;
+  
   List<Text> list = [
     Text("#1 00 : 01 : 55"),
     Text("#1 00 : 31 : 55"),
@@ -22,8 +28,36 @@ class _PStopwatchState extends State<PStopwatch> {
     Text("#1 00 : 25 : 55"),
     Text("#1 00 : 12 : 55"),
   ];
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    print(timer?.isActive);
+    if (timer != null) {
+      _stopTimer();
+      return;
+    }
+    timer = Timer.periodic(Duration(milliseconds: 100), (val) {
+      context.read<CounterBloc>().add(IncrementEvent(duration: Duration(milliseconds: 100)));
+      // context.read<CounterBloc>().state.currentCountTime = Duration(seconds: 5);
+    });
+  }
+
+  void _stopTimer() {
+    timer?.cancel();
+    timer = null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("object");
+    CounterBloc cBloc = context.read<CounterBloc>();
+
     return Scaffold(
       appBar: AppBar(title: Text("Stopwatch")),
       body: Column(
@@ -36,21 +70,34 @@ class _PStopwatchState extends State<PStopwatch> {
                 color: MyColor.cardColor,
                 border: Border.all(color: MyColor.buttonColor, width: 10.w),
               ),
-              child: Center(
-                child: Text(
-                  "00 : 00",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              child: BlocConsumer<CounterBloc,CurrentState>(
+                listener: (context, state){
+                  debugPrint(state.currentCountTime.toString());
+                },
+                builder: (context,counter) {
+                  return Center(
+                    child: Text(
+                      counter.currentCountTime.toString().split(".").first +
+                          ":" +
+                          counter.currentCountTime
+                              .toString()
+                              .split(".")
+                              .last
+                              .substring(0, 2),
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  );
+                }
               ),
             ),
           ).padY(val: 50),
 
-          // list while 
+          // list while
           SizedBox(
             child: ClipRRect(
               child: Align(
                 alignment: Alignment.topCenter,
-              heightFactor: 0.6, // show only top half
+                heightFactor: 0.6, // show only top half
                 child: SizedBox(
                   height: 400,
                   child: ListWheelScrollView.useDelegate(
@@ -71,7 +118,7 @@ class _PStopwatchState extends State<PStopwatch> {
             ),
           ),
 
-          // buttons tile 
+          // buttons tile
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -90,17 +137,24 @@ class _PStopwatchState extends State<PStopwatch> {
               ),
 
               // pose
-              Container(
-                decoration: BoxDecoration(
-                  color: MyColor.buttonColor,
-                  shape: BoxShape.circle,
+              GestureDetector(
+                onTap: () {
+                  print("Start timer called");
+                  _startTimer();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: MyColor.buttonColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: MyColor.white,
+                    size: 25,
+                  ).padAll(),
                 ),
-                child: Icon(
-                  Icons.play_arrow,
-                  color: MyColor.white,
-                  size: 25,
-                ).padAll(),
               ),
+
 
               // share
               Container(
