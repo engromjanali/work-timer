@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:work_timer/presentation/m_stopwatch.dart';
+import 'package:work_timer/presentation/stopwatch/data/s_stopwatch.dart';
 
 // basic declearations ---------
 // singele----
@@ -21,28 +24,70 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class CounterEvent {} // abstract class
 
 class IncrementEvent extends CounterEvent {
-  final Duration duration;
-  IncrementEvent({this.duration = const Duration(milliseconds: 100)});
+  final MStopwatch? mStopwatch;
+  IncrementEvent({this.mStopwatch});
 }
 
 // state
 class CurrentState {
-  Duration currentCountTime;
-  CurrentState({required this.currentCountTime});
+  MStopwatch mStopwatch = MStopwatch(
+    isRunning: false,
+    lapList: [],
+    duration: Duration.zero,
+  );
+  CurrentState({required this.mStopwatch});
 }
 
 class CounterBloc extends Bloc<CounterEvent, CurrentState> {
-  CounterBloc() : super(CurrentState(currentCountTime: Duration.zero)) {
-    // ui will rebuild on emit if the emited instance are not same.
-    // because bloc check by instance not value,
-    // Note: in here we are emit every time a new instance("CurrentState(currentCountTime: state.currentCountTime + event.duration))") that's why ui will be rubild even we are emiting same value.
-    on<IncrementEvent>((event, emit) {
-      return emit(
+  CounterBloc()
+    : super(
         CurrentState(
-          currentCountTime: state.currentCountTime += event.duration,
+          mStopwatch: MStopwatch(
+            isRunning: false,
+            lapList: [],
+            duration: Duration.zero,
+          ),
         ),
+      ) {
+    initializeFromSharedPreferences();
+    // ui will rebuild on emit if the emited instance are not same.
+    // Note: because bloc check by instance/reference not value,
+    // Note: in here we are emit every time a new instance("CurrentState(currentCountTime: state.currentCountTime + event.duration))") that's why ui will be rubild even we are emiting same value.
+    // যদি আপনি every time same instance/reference emit করেন কিন্তু inside data modify করেন, তাহলে:
+    // ✅ Stored state data change হবে
+    // ❌ UI rebuild হবেনা, example
+    // on<IncrementEvent>((event, emit) {
+    //   state.count = state.count + 1;  // ✅ Data change হচ্ছে
+    //   emit(state);                    // ❌ But same reference
+    // });
+    
+    on<IncrementEvent>((event, emit) async {
+      SStopwatch.getInstance.saveCurrentStopwatchState(event.mStopwatch);
+      return emit(
+        CurrentState(mStopwatch: event.mStopwatch ?? state.mStopwatch),
       );
     });
+  }
+
+  Future<void> initializeFromSharedPreferences() async {
+    try {
+      // Fetch the saved stopwatch state from SharedPreferences
+      final MStopwatch? savedStopwatch = await SStopwatch.getInstance
+          .getCurrentStopwatchState();
+
+      if (savedStopwatch != null) {
+        // Emit the saved state as initial state
+        print("sted pre stopwatch value");
+        add(IncrementEvent(mStopwatch: savedStopwatch));
+        // emit(CurrentState(mStopwatch: MStopwatch(isRunning: false, lapList: [], duration: Duration(seconds: 50))));
+      }else{
+        print("state was not save in parsestance store");
+      }
+    } catch (e) {
+      // Handle error, maybe log it
+      // Continue with default state
+      debugPrint('Error loading from SharedPreferences: $e');
+    }
   }
 }
 

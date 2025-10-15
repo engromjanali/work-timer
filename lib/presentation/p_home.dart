@@ -9,7 +9,7 @@ import 'package:work_timer/presentation/p_add_alarm.dart';
 import 'package:work_timer/presentation/p_add_task.dart';
 import 'package:work_timer/presentation/p_history_screen.dart';
 import 'package:work_timer/presentation/p_settings.dart';
-import 'package:work_timer/presentation/p_stopwatch.dart';
+import 'package:work_timer/presentation/stopwatch/p_stopwatch.dart';
 import 'package:work_timer/presentation/p_task.dart';
 import 'package:work_timer/presentation/test.dart';
 
