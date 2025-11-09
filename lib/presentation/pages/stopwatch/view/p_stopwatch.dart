@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:work_timer/core/blocs/b_stopwatch.dart';
@@ -10,11 +8,10 @@ import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
 import 'package:work_timer/core/widgets/w_button.dart';
-import 'package:work_timer/presentation/m_stopwatch.dart';
+import 'package:work_timer/presentation/pages/stopwatch/data/model/m_stopwatch.dart';
 
 class PStopwatch extends StatefulWidget {
   const PStopwatch({super.key});
-
   @override
   State<PStopwatch> createState() => _PStopwatchState();
 }
@@ -42,14 +39,14 @@ class _PStopwatchState extends State<PStopwatch> {
       await Future.delayed(
         Duration(milliseconds: 100),
       ); //after adding a event it's take few mili/micro moment to emit then bloc response setstate/changeState
-      if (cbloc.state.mStopwatch.isRunning && timer == null) {
+      if ((cbloc.state as CurrentState).mStopwatch.isRunning && timer == null) {
         _startTimer();
-        setState(() {
-          
-        });
+        setState(() {});
       } else {
         debugPrint(
-          context.read<CounterBloc>().state.mStopwatch.toJson().toString(),
+          (context.read<CounterBloc>().state as CurrentState).mStopwatch
+              .toJson()
+              .toString(),
         );
       }
     });
@@ -57,13 +54,14 @@ class _PStopwatchState extends State<PStopwatch> {
 
   void _startTimer() {
     debugPrint("timer start called");
+    setState(() {});
     if (timer != null) {
       _stopTimer();
       return;
     }
     timer = Timer.periodic(Duration(milliseconds: 100), (val) {
       final cbloc = context.read<CounterBloc>();
-      MStopwatch mStopwatch = cbloc.state.mStopwatch;
+      MStopwatch mStopwatch = (cbloc.state as CurrentState).mStopwatch;
       DateTime currentTime = DateTime.now();
       cbloc.add(
         IncrementEvent(
@@ -83,7 +81,7 @@ class _PStopwatchState extends State<PStopwatch> {
 
   void _stopTimer() {
     final cbloc = context.read<CounterBloc>();
-    MStopwatch mStopwatch = cbloc.state.mStopwatch;
+    MStopwatch mStopwatch = (cbloc.state as CurrentState).mStopwatch;
 
     cbloc.add(
       IncrementEvent(
@@ -119,7 +117,7 @@ class _PStopwatchState extends State<PStopwatch> {
   void addLap() {
     final cbloc = context.read<CounterBloc>();
 
-    MStopwatch mStopwatch = cbloc.state.mStopwatch;
+    MStopwatch mStopwatch = (cbloc.state as CurrentState).mStopwatch;
     if (!mStopwatch.isRunning) return;
     DateTime currentTime = DateTime.now();
 
@@ -140,11 +138,8 @@ class _PStopwatchState extends State<PStopwatch> {
   @override
   Widget build(BuildContext context) {
     print("main ui rebuild");
-    CounterBloc cBloc = context.read<CounterBloc>();
+    CounterBloc cBloc = context.watch<CounterBloc>();
     return Scaffold(
-      bottomNavigationBar: false
-          ? GestureDetector(onTap: () {}, child: WButton().padX())
-          : null,
       appBar: AppBar(title: Text("Stopwatch")),
       body: Column(
         children: [
@@ -156,9 +151,9 @@ class _PStopwatchState extends State<PStopwatch> {
                 color: MyColor.cardColor,
                 border: Border.all(color: MyColor.buttonColor, width: 10.w),
               ),
-              child: BlocSelector<CounterBloc, CurrentState, Duration>(
+              child: BlocSelector<CounterBloc, CounterState, Duration>(
                 selector: (state) {
-                  return state.mStopwatch.duration;
+                  return (state as CurrentState).mStopwatch.duration;
                 },
                 builder: (context, duration) {
                   print(duration);
@@ -182,11 +177,11 @@ class _PStopwatchState extends State<PStopwatch> {
           ).padY(val: 50),
 
           // list while
-          BlocSelector<CounterBloc, CurrentState, List<Duration>>(
+          BlocSelector<CounterBloc, CounterState, List<Duration>>(
             selector: (state) {
               // selector compare with object reference not value.
               // print("ss${state.mStopwatch.lapList.hashCode}");
-              return state.mStopwatch.lapList;
+              return (state as CurrentState).mStopwatch.lapList;
             },
             builder: (_, length) {
               print("sssss${length}");
@@ -215,10 +210,12 @@ class _PStopwatchState extends State<PStopwatch> {
                             // ? 0
                             // : cBloc.state.mStopwatch.lapList.length - 1,
                             childDelegate: ListWheelChildBuilderDelegate(
-                              childCount: cBloc.state.mStopwatch.lapList.length,
+                              childCount: (cBloc.state as CurrentState)
+                                  .mStopwatch
+                                  .lapList
+                                  .length,
                               builder: (BuildContext context, int index) {
-                                String lap = cBloc
-                                    .state
+                                String lap = (cBloc.state as CurrentState)
                                     .mStopwatch
                                     .lapList[index]
                                     .toString();
@@ -272,7 +269,7 @@ class _PStopwatchState extends State<PStopwatch> {
                 ),
               ),
 
-              // playpose
+              // play / pose
               StatefulBuilder(
                 builder: (context, setLocalState) {
                   return GestureDetector(
@@ -287,7 +284,7 @@ class _PStopwatchState extends State<PStopwatch> {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        !cBloc.state.mStopwatch.isRunning
+                        !(cBloc.state as CurrentState).mStopwatch.isRunning
                             ? Icons.play_arrow
                             : Icons.stop,
                         color: MyColor.white,

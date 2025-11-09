@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_timer/core/constants/keys.dart';
 import 'package:work_timer/core/services/core_services.dart';
-import 'package:work_timer/presentation/m_stopwatch.dart';
+import 'package:work_timer/presentation/pages/stopwatch/data/model/m_stopwatch.dart';
 
-class SStopwatch {
-  static SStopwatch getInstance = SStopwatch._();
+class SvStopwatch {
+  static SvStopwatch getInstance = SvStopwatch._();
   late SharedPreferences _sharedPreferences;
-  SStopwatch._() {
+  SvStopwatch._() {
     _sharedPreferences = CoreServices.instance.sharedPreferences;
   }
 

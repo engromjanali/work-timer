@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:work_timer/core/constants/extentions/w_extention.dart';
 import 'package:work_timer/core/constants/my_color.dart';
 import 'package:work_timer/core/constants/my_dimention.dart';
+import 'package:work_timer/core/methods/date_time_formater.dart';
 import 'package:work_timer/core/widgets/w_button.dart';
 
 class PAddTask extends StatefulWidget {
@@ -16,12 +17,51 @@ class PAddTask extends StatefulWidget {
 class _PAddTaskState extends State<PAddTask> {
   int selectedButton = 0;
   bool getAlert = true;
+  DateTime currentDateTime = DateTime.now();
+  late DateTime startDateTime = currentDateTime;
+  late DateTime endDateTime = currentDateTime;
+
+  Future<DateTime?> getPickedDateTime(
+    BuildContext context,
+    DateTime? dateTime,
+  ) async {
+    DateTime? date = await _getPickedDate(context, dateTime);
+    if (date == null) return null;
+    TimeOfDay? timeOfDay = await _getPickedTime(context, dateTime);
+    if (timeOfDay == null) return null;
+    date.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
+  }
+
+  Future<DateTime?> _getPickedDate(
+    BuildContext context,
+    DateTime? dateTime,
+  ) async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(3000),
+      initialDate: dateTime ?? DateTime.now(),
+      initialEntryMode: DatePickerEntryMode.calendar,
+    );
+    return date;
+  }
+
+  Future<TimeOfDay?> _getPickedTime(
+    BuildContext context,
+    DateTime? dateTime,
+  ) async {
+    TimeOfDay? timeOfDay = await showTimePicker(
+      context: context,
+      initialEntryMode: TimePickerEntryMode.dial,
+      initialTime: TimeOfDay.fromDateTime(dateTime ?? DateTime.now()),
+    );
+    return timeOfDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Task"),
-      ),
+      appBar: AppBar(title: Text("Add Task")),
       body: Column(
         children: [
           // Shedule
@@ -48,14 +88,57 @@ class _PAddTaskState extends State<PAddTask> {
           // time
           Column(
             children: [
+              // start date time
               Row(
                 children: [
-                  Expanded(child: _getTimeRow(label: "Start Time")),
+                  Expanded(
+                    child: _getTimeRow(
+                      label: "Start Date",
+                      isDate: true,
+                      dateOrTime: startDateTime.toString().split(" ").first,
+                      onTap: () async {
+                        DateTime? date = await _getPickedDate(context, null);
+                        print(date);
+                      },
+                    ),
+                  ),
                   spaceX(),
-                  Expanded(child: _getTimeRow(label: "End Time")),
+                  Expanded(
+                    child: _getTimeRow(
+                      label: "Start Time",
+                      dateOrTime: formatedTime(startDateTime),
+                      onTap: () {},
+                    ),
+                  ),
                 ],
               ),
-              _getTimeRow(isDuration: true),
+
+              // end date time 
+              Row(
+                children: [
+                  Expanded(
+                    child: _getTimeRow(
+                      label: "End Date",
+                      dateOrTime: startDateTime.toString().split(" ").first,
+                      onTap: () {},
+                      isDate: true,
+                    ),
+                  ),
+                  spaceX(),
+                  Expanded(
+                    child: _getTimeRow(
+                      label: "End Time",
+                      dateOrTime: formatedTime(endDateTime),
+                      onTap: () {},
+                    ),
+                  ),
+                ],
+              ),
+              _getTimeRow(
+                isDuration: true,
+                dateOrTime: endDateTime.difference(startDateTime).toString(),
+                onTap: () {},
+              ),
             ],
           ).padY(),
 
@@ -102,16 +185,24 @@ class _PAddTaskState extends State<PAddTask> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: Text("Get alert for this task", style: Theme.of(context).textTheme.bodyLarge,)),
+              Expanded(
+                child: Text(
+                  "Get alert for this task",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
               Transform.scale(
                 scaleX: 1.w,
                 scaleY: 0.8.h,
                 child: Switch.adaptive(
                   activeThumbColor: MyColor.buttonColor,
-                  value: getAlert, onChanged: (val) {
+                  value: getAlert,
+                  onChanged: (val) {
                     getAlert = val;
                     setState(() {});
-                  },)),
+                  },
+                ),
+              ),
             ],
           ),
 
@@ -146,35 +237,49 @@ class _PAddTaskState extends State<PAddTask> {
     );
   }
 
-  Widget _getTimeRow({String? label, bool isDuration = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        label == null
-            ? spaceY(val: 0)
-            : Text(label, style: Theme.of(context).textTheme.titleSmall),
-        spaceY(val: 10),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MyDimension.boarderRadius),
-            border: Border.all(color: Color(0xFF0088FF)),
-            color: MyColor.cardColor,
-          ),
-          child: Row(
-            children: [
-              if (!isDuration) Icon(Icons.access_time_sharp),
-              if (!isDuration) spaceX(),
-              Expanded(
-                child: Text(
-                  isDuration ? "Duration : 06 Hour 00 Minute " : "06 : 50 PM",
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: isDuration ? TextAlign.center : TextAlign.start,
+  Widget _getTimeRow({
+    String? label,
+    bool isDuration = false,
+    required Function() onTap,
+    bool isDate = false,
+    required String dateOrTime,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          label == null
+              ? spaceY(val: 0)
+              : Text(label, style: Theme.of(context).textTheme.titleSmall),
+          spaceY(val: 10),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(MyDimension.boarderRadius),
+              border: Border.all(color: Color(0xFF0088FF)),
+              color: MyColor.cardColor,
+            ),
+            child: Row(
+              children: [
+                if (!isDuration)
+                  Icon(
+                    isDate
+                        ? Icons.date_range_outlined
+                        : Icons.access_time_sharp,
+                  ),
+                if (!isDuration) spaceX(),
+                Expanded(
+                  child: Text(
+                    dateOrTime,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: isDuration ? TextAlign.center : TextAlign.start,
+                  ),
                 ),
-              ),
-            ],
-          ).padAll(val: 5.r),
-        ),
-      ],
+              ],
+            ).padAll(val: 5.r),
+          ),
+        ],
+      ).padY(val: isDuration?0:5),
     );
   }
 }

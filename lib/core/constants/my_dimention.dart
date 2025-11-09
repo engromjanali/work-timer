@@ -18,14 +18,14 @@ class MyDimension {
   static double get fieldHeight => 44.h;
   static double get boarderRadius => 8.r;
 
-  // margin/space
-  static double get spaceL => 20.w;
-  static double get spaceR => 20.w;
-  static double get spaceT => 20.h;
-  static double get spaceB => 20.h;
-  static double get spaceX => 8.w;
-  static double get spaceY => 8.h;
-  static double get spaceAll => 10.w;
+  // margin/gap
+  static double get gapL => 20.w;
+  static double get gapR => 20.w;
+  static double get gapT => 20.h;
+  static double get gapB => 20.h;
+  static double get gapX => 8.w;
+  static double get gapY => 8.h;
+  static double get gapAll => 10.w;
 
   // All Font Sizes //
   static double get fontDoubleXL => 24.sp;

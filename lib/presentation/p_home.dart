@@ -9,10 +9,9 @@ import 'package:work_timer/presentation/p_add_alarm.dart';
 import 'package:work_timer/presentation/p_add_task.dart';
 import 'package:work_timer/presentation/p_history_screen.dart';
 import 'package:work_timer/presentation/p_settings.dart';
-import 'package:work_timer/presentation/stopwatch/p_stopwatch.dart';
+import 'package:work_timer/presentation/pages/stopwatch/view/p_stopwatch.dart';
 import 'package:work_timer/presentation/p_task.dart';
 import 'package:work_timer/presentation/test.dart';
-
 
 class PHome extends StatefulWidget {
   const PHome({super.key});
@@ -25,21 +24,14 @@ class _PHomeState extends State<PHome> {
   int selectitem = 0;
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> itemList = [
-      {Keys.label: "Alarm", Keys.imagePath: AMenager.alarm},
-      {Keys.label: "Stop Watch", Keys.imagePath: AMenager.stopWatch},
-      {Keys.label: "Calender", Keys.imagePath: AMenager.calender},
-      {Keys.label: "Timer", Keys.imagePath: AMenager.timer},
-    ];
-
     return Scaffold(
       bottomNavigationBar: Stack(
         children: [
           BottomNavigationBar(
             currentIndex: selectitem,
             onTap: (value) {
-              if(value==1){
-                Get.to(()=>PHistory());
+              if (value == 1) {
+                Get.to(() => PHistory());
                 return;
               }
               selectitem = value;
@@ -60,7 +52,7 @@ class _PHomeState extends State<PHome> {
             child: GestureDetector(
               onTap: () {
                 // do something here
-                Get.to(() => PTask());
+                Get.to(() => PAddTask());
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -77,7 +69,7 @@ class _PHomeState extends State<PHome> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Get.to(()=>PHistory());
+            Get.to(() => PHistory());
           },
           child: Image.asset(
             AMenager.defaultProfile,
@@ -90,7 +82,7 @@ class _PHomeState extends State<PHome> {
         actions: [
           GestureDetector(
             onTap: () {
-              Get.to(()=>PSettings());
+              Get.to(() => PSettings());
             },
             child: Container(
               height: 40.r,
@@ -100,7 +92,7 @@ class _PHomeState extends State<PHome> {
                 border: Border.all(color: MyColor.backgroundColor),
                 shape: BoxShape.circle,
               ),
-              child: Center(child: Icon(Icons.settings, size: 25.r,)),
+              child: Center(child: Icon(Icons.settings, size: 25.r)),
             ),
           ),
         ],
@@ -121,16 +113,16 @@ class _PHomeState extends State<PHome> {
             itemBuilder: (_, index) {
               return _gridItem(
                 label: itemList[index][Keys.label],
-                onTap:(){
-                  switch(index){
+                onTap: () {
+                  switch (index) {
                     case 0:
-                      Get.to(()=>PAddAlarm());
+                      Get.to(() => PAddAlarm());
                     case 1:
-                      Get.to(()=>PStopwatch());
+                      Get.to(() => PStopwatch());
                     case 2:
-                      Get.to(()=>PStopwatch());
+                      Get.to(() => PStopwatch());
                     default:
-                      Get.to(()=>PStopwatch());
+                      Get.to(() => PStopwatch());
                   }
                 },
                 imagePath: itemList[index][Keys.imagePath],
@@ -166,3 +158,10 @@ class _PHomeState extends State<PHome> {
     );
   }
 }
+
+List<Map<String, dynamic>> itemList = [
+  {Keys.label: "Alarm", Keys.imagePath: AMenager.alarm},
+  {Keys.label: "Stop Watch", Keys.imagePath: AMenager.stopWatch},
+  {Keys.label: "Calender", Keys.imagePath: AMenager.calender},
+  {Keys.label: "Timer", Keys.imagePath: AMenager.timer},
+];

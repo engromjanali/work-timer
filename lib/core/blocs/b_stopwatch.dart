@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:work_timer/presentation/m_stopwatch.dart';
-import 'package:work_timer/presentation/stopwatch/data/s_stopwatch.dart';
+import 'package:work_timer/presentation/pages/stopwatch/data/model/m_stopwatch.dart';
+import 'package:work_timer/presentation/pages/stopwatch/data/servics/sv_stopwatch.dart';
 
 // basic declearations ---------
 // singele----
@@ -29,7 +29,8 @@ class IncrementEvent extends CounterEvent {
 }
 
 // state
-class CurrentState {
+abstract class CounterState{}
+class CurrentState extends CounterState{
   MStopwatch mStopwatch = MStopwatch(
     isRunning: false,
     lapList: [],
@@ -38,7 +39,7 @@ class CurrentState {
   CurrentState({required this.mStopwatch});
 }
 
-class CounterBloc extends Bloc<CounterEvent, CurrentState> {
+class CounterBloc extends Bloc<CounterEvent, CounterState> {
   CounterBloc()
     : super(
         CurrentState(
@@ -62,9 +63,9 @@ class CounterBloc extends Bloc<CounterEvent, CurrentState> {
     // });
     
     on<IncrementEvent>((event, emit) async {
-      SStopwatch.getInstance.saveCurrentStopwatchState(event.mStopwatch);
+      SvStopwatch.getInstance.saveCurrentStopwatchState(event.mStopwatch);
       return emit(
-        CurrentState(mStopwatch: event.mStopwatch ?? state.mStopwatch),
+        CurrentState(mStopwatch: event.mStopwatch ?? (state as CurrentState).mStopwatch),
       );
     });
   }
@@ -72,7 +73,7 @@ class CounterBloc extends Bloc<CounterEvent, CurrentState> {
   Future<void> initializeFromSharedPreferences() async {
     try {
       // Fetch the saved stopwatch state from SharedPreferences
-      final MStopwatch? savedStopwatch = await SStopwatch.getInstance
+      final MStopwatch? savedStopwatch = await SvStopwatch.getInstance
           .getCurrentStopwatchState();
 
       if (savedStopwatch != null) {
